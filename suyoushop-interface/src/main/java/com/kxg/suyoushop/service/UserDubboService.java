@@ -1,18 +1,29 @@
 package com.kxg.suyoushop.service;
 
-import com.kxg.suyoushop.request.DeleteUserRequest;
-import com.kxg.suyoushop.request.LoginUserBySmsRequest;
-import com.kxg.suyoushop.request.LoginUserRequest;
-import com.kxg.suyoushop.request.UpdateUserRequest;
-import com.kxg.suyoushop.response.DeleteUserResponse;
-import com.kxg.suyoushop.response.LoginUserResponse;
-import com.kxg.suyoushop.response.UpdateUserResponse;
-
-import java.util.List;
+import com.kxg.suyoushop.request.UserRequest.*;
+import com.kxg.suyoushop.response.TokenResponse;
+import com.kxg.suyoushop.response.UserResponse.*;
 
 public interface UserDubboService {
+
     LoginUserResponse login(LoginUserRequest request);
-    LoginUserResponse loginBySms(LoginUserBySmsRequest loginUserBySmsRequest);
-    UpdateUserResponse updateUserInfo(UpdateUserRequest user);
+
+    LoginUserResponse loginBySms(LoginUserBySmsRequest request);
+
+    UpdateUserImgResponse updateUserImg(UpdateUserImgRequest request);
+
+    UpdateUserPasswordByPhoneResponse updateUserPasswordByPhone(UpdateUserPasswordByPhoneRequest request);
+
+    UpdateUserPasswordByIdResponse updateUserPasswordById(UpdateUserPasswordByIdRequest request);
+
+    UpdateUserNickNameResponse updateUserNickName(UpdateUserNickNameRequest request);
+
+    InvestMoneyResponse investMoney(InvestMoneyRequest request);
+
+    FindUserByIdResponse findUserById(FindUserByIdRequest request);
+
     DeleteUserResponse deleteUser(DeleteUserRequest request);
+
+    FindAllUserResponse findAllUser(FindAllUserRequest request);
+
 }

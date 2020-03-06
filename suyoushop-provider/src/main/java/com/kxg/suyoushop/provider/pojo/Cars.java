@@ -1,8 +1,11 @@
 package com.kxg.suyoushop.provider.pojo;
 
+import lombok.Data;
+
 import java.util.Date;
 import javax.persistence.*;
 
+@Data
 @Table(name = "t_car")
 public class Cars {
     @Id

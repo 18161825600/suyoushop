@@ -1,4 +1,4 @@
-package com.kxg.suyoushop.request;
+package com.kxg.suyoushop.request.UserRequest;
 
 import lombok.Data;
 

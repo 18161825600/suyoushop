@@ -5,10 +5,20 @@ import com.kxg.suyoushop.provider.pojo.User;
 import java.util.List;
 
 public interface UserService {
-    List<User> login(String phoneNumber, String password);
-    List<User> loginBySms(String phoneNumber,String code);
+
+    User login(String phoneNumber, String password);
+
     Integer updateUserInfo(User user);
+
     Integer deleteUser(Long id);
-    List<User> findUserByPhone(String phoneNumber);
-    Integer addNewUser(User user);
+
+    User findUserByPhone(String phoneNumber);
+
+    Integer register(User user);
+
+    User selectUserById(Long id);
+
+    List<User> selectAllUser();
+
+    Integer countAllUser();
 }
