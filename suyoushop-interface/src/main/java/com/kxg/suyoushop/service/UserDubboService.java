@@ -1,10 +1,13 @@
 package com.kxg.suyoushop.service;
 
+import com.kxg.suyoushop.request.TokenRequest;
 import com.kxg.suyoushop.request.UserRequest.*;
 import com.kxg.suyoushop.response.TokenResponse;
 import com.kxg.suyoushop.response.UserResponse.*;
 
 public interface UserDubboService {
+
+    RegisterResponse register(RegisterRequest request);
 
     LoginUserResponse login(LoginUserRequest request);
 
@@ -25,5 +28,7 @@ public interface UserDubboService {
     DeleteUserResponse deleteUser(DeleteUserRequest request);
 
     FindAllUserResponse findAllUser(FindAllUserRequest request);
+
+    TokenResponse code(TokenRequest request);
 
 }

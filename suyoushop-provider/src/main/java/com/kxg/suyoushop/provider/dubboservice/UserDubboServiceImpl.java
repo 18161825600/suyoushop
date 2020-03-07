@@ -3,6 +3,7 @@ package com.kxg.suyoushop.provider.dubboservice;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kxg.suyoushop.dto.UserDto;
+import com.kxg.suyoushop.request.TokenRequest;
 import com.kxg.suyoushop.request.UserRequest.*;
 import com.kxg.suyoushop.response.TokenResponse;
 import com.kxg.suyoushop.response.UserResponse.*;
@@ -30,6 +31,25 @@ public class UserDubboServiceImpl implements UserDubboService {
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
+    public RegisterResponse register(RegisterRequest request) {
+        User user = new User();
+        RegisterResponse response = new RegisterResponse();
+        if(request.getCode().equals(stringRedisTemplate.opsForValue().get(request.getPhoneNumber()))){
+            BeanUtils.copyProperties(request,user);
+            user.setExistMoney(0.0);
+            user.setImgUrl("zzz");
+            user.setCreateTime(new Date());
+            user.setUpdateTime(new Date());
+            userService.register(user);
+            response.setInteger(1);
+            return response;
+        }else {
+            response.setInteger(0);
+            return response;
+        }
+    }
+
+    @Override
     public LoginUserResponse login(LoginUserRequest request) {
         User login = userService.login(request.getPhoneNumber(), request.getPassword());
         if(login != null){
@@ -44,9 +64,8 @@ public class UserDubboServiceImpl implements UserDubboService {
     @Override
     public LoginUserResponse loginBySms(LoginUserBySmsRequest request) {
         User login = userService.findUserByPhone(request.getPhoneNumber());
-        String code = stringRedisTemplate.opsForValue().get(request.getPhoneNumber());
         LoginUserResponse response = new LoginUserResponse();
-        if(code.equals(request.getCode())) {
+        if(request.getCode().equals(stringRedisTemplate.opsForValue().get(request.getPhoneNumber()))) {
             if (login != null) {
                 BeanUtils.copyProperties(login, response);
                 response.setMsg("ok");
@@ -81,12 +100,11 @@ public class UserDubboServiceImpl implements UserDubboService {
 
     @Override
     public UpdateUserPasswordByPhoneResponse updateUserPasswordByPhone(UpdateUserPasswordByPhoneRequest request) {
-        User user = userService.findUserByPhone(request.getPhoneNum());
-        String code = stringRedisTemplate.opsForValue().get(request.getPhoneNum());
+        User user = userService.findUserByPhone(request.getPhoneNumber());
         UpdateUserPasswordByPhoneResponse response = new UpdateUserPasswordByPhoneResponse();
 
         if(user != null) {
-            if (code.equals(request.getCode())) {
+            if (request.getCode().equals(stringRedisTemplate.opsForValue().get(request.getPhoneNumber()))) {
                 user.setPassword(request.getPassword());
                 user.setUpdateTime(new Date());
 
@@ -169,6 +187,14 @@ public class UserDubboServiceImpl implements UserDubboService {
         return response;
     }
 
+    @Override
+    public TokenResponse code(TokenRequest request) {
+        TokenResponse response = new TokenResponse();
+        String code = getCode(request.getPhoneNumber());
+        response.setToken(code);
+        return response;
+    }
+
     private String getCode(String phoneNum){
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < 6; i++) {
@@ -178,4 +204,6 @@ public class UserDubboServiceImpl implements UserDubboService {
         stringRedisTemplate.opsForValue().set(phoneNum,stringBuilder.toString());
         return stringBuilder.toString();
     }
+
+
 }

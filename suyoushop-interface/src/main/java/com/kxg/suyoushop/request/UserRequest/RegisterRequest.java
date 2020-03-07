@@ -1,16 +1,17 @@
 package com.kxg.suyoushop.request.UserRequest;
 
 import lombok.Data;
-import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 
 @Data
-public class UpdateUserPasswordByPhoneRequest implements Serializable {
+public class RegisterRequest implements Serializable {
 
     private String phoneNumber;
 
     private String code;
+
+    private String nickName;
 
     private String password;
 }
