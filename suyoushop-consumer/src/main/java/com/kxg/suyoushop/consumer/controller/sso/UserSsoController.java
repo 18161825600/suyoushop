@@ -9,6 +9,7 @@ import com.kxg.suyoushop.service.UserDubboService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,13 +25,13 @@ public class UserSsoController {
 
     @ApiOperation(value = "手机号密码登录")
     @PostMapping("login")
-    public ShopJsonResult<LoginUserResponse> login(@RequestBody LoginUserRequest request){
+    public ShopJsonResult<LoginUserResponse> login(@RequestBody @Validated LoginUserRequest request){
         return ShopJsonResult.ok(userDubboService.login(request));
     }
 
     @ApiOperation(value = "短信验证码登录")
     @PostMapping("login/sms")
-    public ShopJsonResult<LoginUserResponse> loginBySms(@RequestBody LoginUserBySmsRequest request){
+    public ShopJsonResult<LoginUserResponse> loginBySms(@RequestBody @Validated LoginUserBySmsRequest request){
         return ShopJsonResult.ok(userDubboService.loginBySms(request));
     }
 }
