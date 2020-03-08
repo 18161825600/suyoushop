@@ -2,11 +2,10 @@ package com.kxg.suyoushop.provider.dubboservice;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.kxg.suyoushop.constant.SuYouShopConstants;
 import com.kxg.suyoushop.dto.UserDto;
-import com.kxg.suyoushop.request.TokenRequest;
-import com.kxg.suyoushop.request.UserRequest.*;
-import com.kxg.suyoushop.response.TokenResponse;
-import com.kxg.suyoushop.response.UserResponse.*;
+import com.kxg.suyoushop.request.userRequest.*;
+import com.kxg.suyoushop.response.userResponse.*;
 import com.kxg.suyoushop.service.UserDubboService;
 import com.kxg.suyoushop.provider.pojo.User;
 import com.kxg.suyoushop.provider.service.UserService;
@@ -16,10 +15,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service(version = "1.0.0")
@@ -52,24 +49,30 @@ public class UserDubboServiceImpl implements UserDubboService {
     @Override
     public LoginUserResponse login(LoginUserRequest request) {
         User login = userService.login(request.getPhoneNumber(), request.getPassword());
+        LoginUserResponse response = new LoginUserResponse();
+        UserDto userDto = new UserDto();
         if(login != null){
-            LoginUserResponse response = new LoginUserResponse();
-            BeanUtils.copyProperties(login,response);
-            response.setMsg("ok");
+            BeanUtils.copyProperties(login,userDto);
+            response.setUserDto(userDto);
+            response.setMsg(SuYouShopConstants.LOGIN_SUCCESS);
+            response.setToken(token(userDto));
             return response;
+        }else {
+            response.setMsg(SuYouShopConstants.PHONE_OR_PWD_NOT_RIGHT);
+            return null;
         }
-        return null;
     }
 
     @Override
-    public LoginUserResponse loginBySms(LoginUserBySmsRequest request) {
+    public LoginBySmsOtherResponse loginBySms(LoginUserBySmsRequest request) {
         User login = userService.findUserByPhone(request.getPhoneNumber());
-        LoginUserResponse response = new LoginUserResponse();
+        LoginBySmsOtherResponse response = new LoginBySmsOtherResponse();
+        UserDto userDto = new UserDto();
         if(request.getCode().equals(stringRedisTemplate.opsForValue().get(request.getPhoneNumber()))) {
             if (login != null) {
-                BeanUtils.copyProperties(login, response);
-                response.setMsg("ok");
-                return response;
+                BeanUtils.copyProperties(login, userDto);
+                response.setMsg(SuYouShopConstants.LOGIN_SUCCESS);
+                response.setUserDto(userDto);
             }else {
                 User user = new User();
                 user.setPhoneNumber(request.getPhoneNumber());
@@ -77,12 +80,14 @@ public class UserDubboServiceImpl implements UserDubboService {
                 user.setUpdateTime(new Date());
                 userService.register(user);
 
-                BeanUtils.copyProperties(user, response);
-                response.setMsg("ok");
-                return response;
+                BeanUtils.copyProperties(user, userDto);
+                response.setUserDto(userDto);
+                response.setMsg(SuYouShopConstants.LOGIN_SUCCESS);
             }
+            response.setToken(token(userDto));
+            return response;
         }else {
-            response.setMsg("验证码错误");
+            response.setMsg(SuYouShopConstants.CODE_IS_NOT_RIGHT);
             return response;
         }
     }
@@ -187,22 +192,10 @@ public class UserDubboServiceImpl implements UserDubboService {
         return response;
     }
 
-    @Override
-    public TokenResponse code(TokenRequest request) {
-        TokenResponse response = new TokenResponse();
-        String code = getCode(request.getPhoneNumber());
-        response.setToken(code);
-        return response;
-    }
-
-    private String getCode(String phoneNum){
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 6; i++) {
-            stringBuilder.append(new Random().nextInt(10));
-        }
-        log.info(stringBuilder.toString());
-        stringRedisTemplate.opsForValue().set(phoneNum,stringBuilder.toString());
-        return stringBuilder.toString();
+    private String token(UserDto userDto){
+        String token = UUID.randomUUID().toString()+":"+userDto.getPhoneNumber()+":"+userDto.getId()+":user";
+        stringRedisTemplate.opsForValue().set(token,userDto.toString(),30, TimeUnit.MINUTES);
+        return token;
     }
 
 

@@ -1,9 +1,9 @@
 package com.kxg.suyoushop.service;
 
-import com.kxg.suyoushop.request.TokenRequest;
-import com.kxg.suyoushop.request.UserRequest.*;
-import com.kxg.suyoushop.response.TokenResponse;
-import com.kxg.suyoushop.response.UserResponse.*;
+import com.kxg.suyoushop.request.PhoneNumberCodeRequest;
+import com.kxg.suyoushop.request.userRequest.*;
+import com.kxg.suyoushop.response.PhoneNumberCodeResponse;
+import com.kxg.suyoushop.response.userResponse.*;
 
 public interface UserDubboService {
 
@@ -11,7 +11,7 @@ public interface UserDubboService {
 
     LoginUserResponse login(LoginUserRequest request);
 
-    LoginUserResponse loginBySms(LoginUserBySmsRequest request);
+    LoginBySmsOtherResponse loginBySms(LoginUserBySmsRequest request);
 
     UpdateUserImgResponse updateUserImg(UpdateUserImgRequest request);
 
@@ -29,6 +29,5 @@ public interface UserDubboService {
 
     FindAllUserResponse findAllUser(FindAllUserRequest request);
 
-    TokenResponse code(TokenRequest request);
 
 }
