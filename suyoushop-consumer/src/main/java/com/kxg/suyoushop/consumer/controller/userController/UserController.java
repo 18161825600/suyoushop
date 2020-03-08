@@ -1,10 +1,8 @@
-package com.kxg.suyoushop.consumer.controller.UserController;
+package com.kxg.suyoushop.consumer.controller.userController;
 
 
 import com.kxg.suyoushop.common.ShopJsonResult;
-import com.kxg.suyoushop.request.PhoneNumberCodeRequest;
 import com.kxg.suyoushop.request.userRequest.*;
-import com.kxg.suyoushop.response.PhoneNumberCodeResponse;
 import com.kxg.suyoushop.response.userResponse.*;
 import com.kxg.suyoushop.service.UserDubboService;
 import io.swagger.annotations.Api;
