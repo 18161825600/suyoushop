@@ -7,6 +7,7 @@ public class SuYouShopConstants {
     public final static String PHONE_OR_PWD_NOT_RIGHT="手机号或密码错误";
     public final static String PHONE_NUMBER_NOT_RIGHT="手机号错误";
     public final static String TOKEN_IS_NOT_RIGHT="当前token错误,请检查token是否正确，或者过期";
+    public final static String PAY_TOKEN_NOT_RIGHT="支付token错误，请检查支付token是否正确";
     /**
      * 没有支付
      */

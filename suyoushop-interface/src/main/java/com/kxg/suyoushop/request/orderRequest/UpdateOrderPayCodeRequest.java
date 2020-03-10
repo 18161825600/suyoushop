@@ -11,8 +11,11 @@ public class UpdateOrderPayCodeRequest implements Serializable {
     private static final long serialVersionUID = -4554336634706387268L;
 
     @NotNull
-    private Long id;
+    private Long orderId;
 
     @NotEmpty
     private String payCode;
+
+    @NotNull
+    private Short status;
 }

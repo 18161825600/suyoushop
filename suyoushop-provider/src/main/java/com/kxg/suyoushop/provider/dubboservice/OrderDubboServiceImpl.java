@@ -53,7 +53,8 @@ public class OrderDubboServiceImpl implements OrderDubboService {
     @Override
     public UpdateOrderPayCodeResponse updateOrderPayCode(UpdateOrderPayCodeRequest request) {
         UpdateOrderPayCodeResponse response = new UpdateOrderPayCodeResponse();
-        Orders orderById = ordersService.findOrderById(request.getId());
+        Orders orderById = ordersService.findOrderById(request.getOrderId());
+        orderById.setStatus(request.getStatus());
         orderById.setPayCode(request.getPayCode());
         orderById.setUpdateTime(new Date());
         response.setInteger(ordersService.updateOrder(orderById));
