@@ -12,6 +12,5 @@ public class UpdateOrderStatusRequest implements Serializable {
     @NotNull
     private Long id;
 
-    @NotNull
     private Short status;
 }

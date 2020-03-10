@@ -16,6 +16,5 @@ public class UpdateOrderPayCodeRequest implements Serializable {
     @NotEmpty
     private String payCode;
 
-    @NotNull
     private Short status;
 }

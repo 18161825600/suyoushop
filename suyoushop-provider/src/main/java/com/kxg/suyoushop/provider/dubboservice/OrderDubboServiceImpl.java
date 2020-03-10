@@ -41,6 +41,20 @@ public class OrderDubboServiceImpl implements OrderDubboService {
     }
 
     @Override
+    public DeletePaymentOrderResponse deletePaymentOrder(DeletePaymentOrderRequest request) {
+        DeletePaymentOrderResponse response = new DeletePaymentOrderResponse();
+        Orders orderById = ordersService.findOrderById(request.getOrderId());
+        if("0".equals(orderById.getStatus())){
+            List<Long> list = new ArrayList<>();
+            list.add(request.getOrderId());
+            response.setInteger(ordersService.deleteOrder(list));
+        }else {
+            response.setInteger(0);
+        }
+        return response;
+    }
+
+    @Override
     public UpdateOrderStatusResponse updateOrderStatus(UpdateOrderStatusRequest request) {
         UpdateOrderStatusResponse response = new UpdateOrderStatusResponse();
         Orders orderById = ordersService.findOrderById(request.getId());

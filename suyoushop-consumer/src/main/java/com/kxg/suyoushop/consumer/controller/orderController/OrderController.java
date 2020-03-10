@@ -39,6 +39,14 @@ public class OrderController {
         }else return ShopJsonResult.errorMsg(SuYouShopConstants.TOKEN_IS_NOT_RIGHT);
     }
 
+    @ApiOperation(value ="删除未支付的订单")
+    @PostMapping("delete/payment")
+    public ShopJsonResult<DeletePaymentOrderResponse> deletePaymentOrder(@RequestHeader("Token")String token, @RequestBody @Validated DeletePaymentOrderRequest request){
+        if(checkHandler.checkSsoToken(token)){
+            return ShopJsonResult.ok(orderDubboService.deletePaymentOrder(request));
+        }else return ShopJsonResult.errorMsg(SuYouShopConstants.TOKEN_IS_NOT_RIGHT);
+    }
+
     @ApiOperation(value ="修改订单状态")
     @PostMapping("update/status")
     public ShopJsonResult<UpdateOrderStatusResponse> updateOrderStatus( @RequestBody @Validated UpdateOrderStatusRequest request){
@@ -89,7 +97,7 @@ public class OrderController {
 
     @ApiOperation(value ="查找所有订单")
     @PostMapping("find/all")
-    public ShopJsonResult<FindAllOrderResponse> findAllOrder(FindAllOrderRequest request){
+    public ShopJsonResult<FindAllOrderResponse> findAllOrder(@RequestBody FindAllOrderRequest request){
         return ShopJsonResult.ok(orderDubboService.findAllOrder(request));
     }
 }

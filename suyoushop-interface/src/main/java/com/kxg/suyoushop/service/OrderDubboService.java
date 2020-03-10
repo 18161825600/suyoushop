@@ -11,6 +11,8 @@ public interface OrderDubboService {
 
     DeleteOrdersResponse deleteOrder(DeleteOrdersRequest request);
 
+    DeletePaymentOrderResponse deletePaymentOrder(DeletePaymentOrderRequest request);
+
     UpdateOrderStatusResponse updateOrderStatus(UpdateOrderStatusRequest request);
 
     UpdateOrderPayCodeResponse updateOrderPayCode(UpdateOrderPayCodeRequest request);
